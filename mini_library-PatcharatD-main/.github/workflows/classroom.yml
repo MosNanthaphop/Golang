@@ -1,0 +1,80 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: ex1
+      id: ex1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex1
+        setup-command: ''
+        command: go test ./models -run ^TestEx1
+        timeout: 10
+        max-score: 10
+    - name: ex2
+      id: ex2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex2
+        setup-command: ''
+        command: go test  ./models -run ^TestEx2
+        timeout: 10
+        max-score: 15
+    - name: ex3
+      id: ex3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex3
+        setup-command: ''
+        command: go test  ./models -run ^TestEx3
+        timeout: 10
+        max-score: 15
+    - name: ex4
+      id: ex4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex4
+        setup-command: ''
+        command: go test  ./models -run ^TestEx4
+        timeout: 10
+        max-score: 20
+    - name: ex5
+      id: ex5
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex5
+        setup-command: ''
+        command: go test  ./models -run ^TestEx5
+        timeout: 10
+        max-score: 25
+    - name: ex6
+      id: ex6
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: ex6
+        setup-command: ''
+        command: go test  ./models -run ^TestEx6
+        timeout: 10
+        max-score: 15
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        EX1_RESULTS: "${{steps.ex1.outputs.result}}"
+        EX2_RESULTS: "${{steps.ex2.outputs.result}}"
+        EX3_RESULTS: "${{steps.ex3.outputs.result}}"
+        EX4_RESULTS: "${{steps.ex4.outputs.result}}"
+        EX5_RESULTS: "${{steps.ex5.outputs.result}}"
+        EX6_RESULTS: "${{steps.ex6.outputs.result}}"
+      with:
+        runners: ex1,ex2,ex3,ex4,ex5,ex6
